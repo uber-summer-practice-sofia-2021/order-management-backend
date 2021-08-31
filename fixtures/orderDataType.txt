@@ -1,0 +1,29 @@
+*clientName: String,
+*from: Address {
+    latitude: Double,
+    longtitude: Double,
+    addressName: String
+},
+*to: Address {
+    latitude: Double,
+    longtitude: Double,
+    addressName: String
+},
+*clientEmail: String,
+phoneNumber: String,
+dimensions: OrderDimensions {
+    length: Double,
+    depth: Double,
+    height: Double,
+    weight: Double
+},
+tags: ArrayList<Enum>,
+*deliveryType: Enum,
+*ID: String,
+*status: Status {
+    state: Enum,
+    assigned: boolean
+},
+*createdAt: String
+ 
+*required
