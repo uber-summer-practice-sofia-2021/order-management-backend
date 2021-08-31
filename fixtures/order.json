@@ -1,0 +1,32 @@
+{
+    "clientName": "John Smith",
+    "from": {
+        "latitude": 1,
+        "longtitude": 2,
+        "address": "Mladost 5, Sofia"
+    },
+    "to": {
+        "latitude": 4,
+        "longtitude": 5,
+        "address": "Mladost 1, Sofia"
+    },
+    "clientEmail": "jsmith@mail.bg",
+    "phoneNumber": "0894546512",
+    "dimensions": {
+        "length": 5,
+        "depth": 2,
+        "height": 3,
+        "weight": 10
+    },
+    "tags": [
+        "dangerous",
+        "fragile"
+    ],
+    "deliveryType": "Uber Express",
+    "ID": "123e4567-e89b-12d3-a456-426614174000",
+    "status": {
+        "state": "open",
+        "assigned": false
+    },
+    "createdAt": "2021-08-31"
+}
