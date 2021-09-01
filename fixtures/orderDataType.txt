@@ -24,6 +24,6 @@ tags: ArrayList<Enum>,
     state: Enum,
     assigned: boolean
 },
-*createdAt: String
+*createdAt: LocalDateTime
  
 *required
