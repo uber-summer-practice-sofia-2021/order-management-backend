@@ -1,12 +1,12 @@
 *clientName: String,
 *from: Address {
     latitude: Double,
-    longtitude: Double,
+    longitude: Double,
     addressName: String
 },
 *to: Address {
     latitude: Double,
-    longtitude: Double,
+    longitude: Double,
     addressName: String
 },
 *clientEmail: String,
