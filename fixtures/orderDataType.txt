@@ -19,7 +19,7 @@ dimensions: OrderDimensions {
 },
 tags: ArrayList<Enum>,
 *deliveryType: Enum,
-*ID: String,
+*ID: UUID,
 *status: Status {
     state: Enum,
     assigned: boolean
