@@ -7,26 +7,44 @@ import com.uber.summer.practice.order.management.order.status.Status;
 import com.uber.summer.practice.order.management.order.status.state.State;
 import com.uber.summer.practice.order.management.order.tags.Tags;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-public class Order {
+@Entity
+public class ClientOrder {
     private String clientName;
-    private Address from;
-    private Address to;
+    private transient Address from;
+    private transient Address to;
     private String clientEmail;
     private String phoneNumber;
-    private OrderDimensions orderDimensions;
-    private List<Tags> tags;
+    private transient OrderDimensions orderDimensions;
+    private transient List<Tags> tags;
     private DeliveryType deliveryType;
-    private final UUID ID;
-    private Status status;
-    private final LocalDateTime createdAt;
+    @Id @GeneratedValue
+    private final UUID ID = UUID.randomUUID();
+    private transient Status status;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
-    static final public Order orderTest = new Order(
+    public ClientOrder(String clientName, Address from, Address to, String clientEmail,
+                       String phoneNumber, OrderDimensions orderDimensions, List<Tags> tags,
+                       DeliveryType deliveryType) {
+        this.clientName = clientName;
+        this.from = from;
+        this.to = to;
+        this.clientEmail = clientEmail;
+        this.phoneNumber = phoneNumber;
+        this.orderDimensions = orderDimensions;
+        this.tags = tags;
+        this.deliveryType = deliveryType;
+        this.status = new Status(State.OPEN, false);
+    }
+
+    static final public ClientOrder CLIENT_ORDER_TEST_1 = new ClientOrder(
             "Borislav",
             new Address(12.4, 32.5, "Mladost 1"),
             new Address(24.4, 76.4, "Mladost 5"),
@@ -36,6 +54,21 @@ public class Order {
             new ArrayList<>(Arrays.asList(Tags.DANGEROUS, Tags.FRAGILE)),
             DeliveryType.EXPRESS
     );
+
+    static final public ClientOrder CLIENT_ORDER_TEST_2 = new ClientOrder(
+            "Ivan Todorov",
+            new Address(32.4, 322.5, "Ovcha kupel"),
+            new Address(14.4, 26.4, "Studentski grad"),
+            "example@gmail.com",
+            "089212342",
+            new OrderDimensions(22, 2.3, 10, 16),
+            new ArrayList<>(Arrays.asList(Tags.DANGEROUS)),
+            DeliveryType.STANDARD
+    );
+
+    public ClientOrder() {
+    }
+
 
     @Override
     public String toString() {
@@ -52,22 +85,6 @@ public class Order {
                 ", status=" + status.toString() +
                 ", createdAt=" + createdAt +
                 "}";
-    }
-
-    public Order(String clientName, Address from, Address to, String clientEmail,
-                 String phoneNumber, OrderDimensions orderDimensions, List<Tags> tags,
-                 DeliveryType deliveryType) {
-        this.clientName = clientName;
-        this.from = from;
-        this.to = to;
-        this.clientEmail = clientEmail;
-        this.phoneNumber = phoneNumber;
-        this.orderDimensions = orderDimensions;
-        this.tags = tags;
-        this.deliveryType = deliveryType;
-        this.ID = UUID.randomUUID();
-        this.status = new Status(State.OPEN, false);
-        this.createdAt = LocalDateTime.now();
     }
 
     public UUID getID() {
@@ -148,5 +165,32 @@ public class Order {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.clientName, this.from, this.to, this.clientEmail,
+                this.phoneNumber, this.orderDimensions, this.tags, this.deliveryType, this.ID,
+                this.status, this.createdAt);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof ClientOrder))
+            return false;
+        ClientOrder clientOrder = (ClientOrder) obj;
+        return Objects.equals(this.clientName, clientOrder.clientName)
+                && Objects.equals(this.from, clientOrder.from)
+                && Objects.equals(this.to, clientOrder.to)
+                && Objects.equals(this.clientEmail, clientOrder.clientName)
+                && Objects.equals(this.phoneNumber, clientOrder.phoneNumber)
+                && Objects.equals(this.orderDimensions, clientOrder.orderDimensions)
+                && Objects.equals(this.tags, clientOrder.tags)
+                && Objects.equals(this.deliveryType, clientOrder.deliveryType)
+                && Objects.equals(this.ID, clientOrder.ID)
+                && Objects.equals(this.status, clientOrder.status)
+                && Objects.equals(this.createdAt, clientOrder.createdAt);
     }
 }

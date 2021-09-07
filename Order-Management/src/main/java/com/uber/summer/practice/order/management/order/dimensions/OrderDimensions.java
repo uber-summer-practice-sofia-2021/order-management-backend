@@ -1,6 +1,9 @@
 package com.uber.summer.practice.order.management.order.dimensions;
 
-public class OrderDimensions {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class OrderDimensions implements Serializable{
     private double length;
     private double depth;
     private double height;
@@ -53,5 +56,18 @@ public class OrderDimensions {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderDimensions that = (OrderDimensions) o;
+        return Double.compare(that.length, length) == 0 && Double.compare(that.depth, depth) == 0 && Double.compare(that.height, height) == 0 && Double.compare(that.weight, weight) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(length, depth, height, weight);
     }
 }
