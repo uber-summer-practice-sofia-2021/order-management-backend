@@ -26,9 +26,9 @@ public class ClientOrder {
     private transient List<Tags> tags;
     private DeliveryType deliveryType;
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private final UUID ID = UUID.randomUUID();
+    private final UUID ID;
     private transient Status status;
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt;
 
     public ClientOrder(String clientName, Address from, Address to, String clientEmail,
                        String phoneNumber, OrderDimensions orderDimensions, List<Tags> tags,
@@ -41,7 +41,9 @@ public class ClientOrder {
         this.orderDimensions = orderDimensions;
         this.tags = tags;
         this.deliveryType = deliveryType;
+        this.ID = UUID.randomUUID();
         this.status = new Status(State.OPEN, false);
+        this.createdAt=LocalDateTime.now();
     }
 
     static final public ClientOrder CLIENT_ORDER_TEST_1 = new ClientOrder(
@@ -52,8 +54,7 @@ public class ClientOrder {
             "02478242",
             new OrderDimensions(12, 23.3, 4, 6),
             new ArrayList<>(Arrays.asList(Tags.DANGEROUS, Tags.FRAGILE)),
-            DeliveryType.EXPRESS
-    );
+            DeliveryType.EXPRESS);
 
     static final public ClientOrder CLIENT_ORDER_TEST_2 = new ClientOrder(
             "Ivan Todorov",
@@ -63,10 +64,12 @@ public class ClientOrder {
             "089212342",
             new OrderDimensions(22, 2.3, 10, 16),
             new ArrayList<>(Arrays.asList(Tags.DANGEROUS)),
-            DeliveryType.STANDARD
-    );
+            DeliveryType.STANDARD);
 
     public ClientOrder() {
+        this.ID = UUID.randomUUID();
+        this.createdAt=LocalDateTime.now();
+        this.status=new Status(State.OPEN,false);
     }
 
 
