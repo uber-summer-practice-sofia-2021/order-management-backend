@@ -1,5 +1,7 @@
 spring:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      -
+    jpa:
+        hibernate:
+            ddl-auto: create
+    datasource:
+        url: jdbc:sqlite:orders.db
+        driver-class-name: org.sqlite.JDBC

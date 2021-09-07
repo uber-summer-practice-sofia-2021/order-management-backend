@@ -1,7 +1,7 @@
 package com.uber.summer.practice.order.management.controller;
 
 import com.uber.summer.practice.order.management.order.ClientOrder;
-import com.uber.summer.practice.order.management.service.OrderService;
+import com.uber.summer.practice.order.management.services.OrderService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,6 +16,6 @@ public class OrderController {
 
     @GetMapping("/orders")
     public List<ClientOrder> getOrders() {
-        return orderService.serviceGetOrders();
+        return orderService.getOrders();
     }
 }

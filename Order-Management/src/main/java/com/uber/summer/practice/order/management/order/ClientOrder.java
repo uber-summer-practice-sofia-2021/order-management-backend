@@ -25,7 +25,7 @@ public class ClientOrder {
     private transient OrderDimensions orderDimensions;
     private transient List<Tags> tags;
     private DeliveryType deliveryType;
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID ID = UUID.randomUUID();
     private transient Status status;
     private final LocalDateTime createdAt = LocalDateTime.now();
