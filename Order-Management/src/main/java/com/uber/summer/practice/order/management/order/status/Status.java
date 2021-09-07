@@ -2,7 +2,10 @@ package com.uber.summer.practice.order.management.order.status;
 
 import com.uber.summer.practice.order.management.order.status.state.State;
 
-public class Status {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Status implements Serializable {
     private State state;
     private boolean assigned;
 
@@ -33,5 +36,18 @@ public class Status {
 
     public void setAssigned(boolean assigned) {
         this.assigned = assigned;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Status status = (Status) o;
+        return assigned == status.assigned && state == status.state;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(state, assigned);
     }
 }

@@ -1,10 +1,14 @@
 package com.uber.summer.practice.order.management.service;
 
-import org.springframework.stereotype.Component;
+import com.uber.summer.practice.order.management.order.ClientOrder;
+import org.springframework.stereotype.Service;
 
-@Component
+import java.util.List;
+
+@Service
 public class OrderService {
-    public String getOrders() {
-        return "order list";
+
+    public List<ClientOrder> serviceGetOrders() {
+        return List.of(new ClientOrder());
     }
 }

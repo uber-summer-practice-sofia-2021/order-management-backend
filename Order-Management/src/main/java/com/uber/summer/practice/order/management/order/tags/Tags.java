@@ -1,6 +1,8 @@
 package com.uber.summer.practice.order.management.order.tags;
 
-public enum Tags {
+import java.io.Serializable;
+
+public enum Tags implements Serializable {
     DANGEROUS,
     FRAGILE
 }

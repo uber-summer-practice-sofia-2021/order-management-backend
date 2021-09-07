@@ -1,6 +1,9 @@
 package com.uber.summer.practice.order.management.order.address;
 
-public class Address {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Address implements Serializable{
     private double latitude;
     private double longitude;
     private String addressName;
@@ -42,5 +45,18 @@ public class Address {
 
     public void setAddressName(String addressName) {
         this.addressName = addressName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Double.compare(address.latitude, latitude) == 0 && Double.compare(address.longitude, longitude) == 0 && Objects.equals(addressName, address.addressName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, addressName);
     }
 }
