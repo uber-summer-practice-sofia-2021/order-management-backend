@@ -7,6 +7,7 @@ import com.uber.summer.practice.order.management.order.status.state.State;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.sqlite.SQLiteException;
 
 import javax.annotation.Resource;
 import javax.persistence.*;
@@ -23,6 +24,12 @@ import java.util.function.Predicate;
 public class OrdersDAO {
     //get order
     public ClientOrder findByID(UUID ID) {
+//        try{
+//
+//        } catch (SQLiteException e) {
+//            e.getResultCode();
+//            e.getErrorCode();
+//        }
         return new ClientOrder();
     }
 
