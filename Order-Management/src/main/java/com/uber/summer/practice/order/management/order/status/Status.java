@@ -2,16 +2,28 @@ package com.uber.summer.practice.order.management.order.status;
 
 import com.uber.summer.practice.order.management.order.status.state.State;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
+@Entity
 public class Status implements Serializable {
     private State state;
     private boolean assigned;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    public UUID orderStatusID;
 
     public Status(State state, boolean assigned) {
         this.state = state;
         this.assigned = assigned;
+    }
+
+    public Status() {
+          this(State.OPEN,false);
     }
 
     public State getState() {

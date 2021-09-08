@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
-    <persistence-unit name="stud">
+    <persistence-unit name="per">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
-            <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/agisdb"/>
-            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="toplink.jdbc.url" value="jdbc:sqlite://localhost:8080/orders.db"/>
+            <property name="toplink.jdbc.driver" value="com.sqlite.jdbc.Driver"/>
             <property name="toplink.jdbc.user" value="root"/>
             <property name="toplink.jdbc.password" value="password"/>
         </properties>

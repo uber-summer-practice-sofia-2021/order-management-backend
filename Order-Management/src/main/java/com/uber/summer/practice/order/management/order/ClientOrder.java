@@ -197,3 +197,4 @@ public class ClientOrder {
                 && Objects.equals(this.createdAt, clientOrder.createdAt);
     }
 }
+

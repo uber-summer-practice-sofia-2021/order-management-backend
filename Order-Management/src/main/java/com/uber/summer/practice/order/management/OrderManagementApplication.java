@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OrderManagementApplication {
 
     public static void main(String[] args) {
-        //OrdersDAO dao = new OrdersDAO();
-        //dao.update(new ClientOrder());
+        OrdersDAO dao = new OrdersDAO();
+        dao.update(new ClientOrder());
         SpringApplication.run(OrderManagementApplication.class, args);
     }
 

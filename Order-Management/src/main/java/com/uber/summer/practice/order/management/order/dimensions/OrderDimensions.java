@@ -1,19 +1,31 @@
 package com.uber.summer.practice.order.management.order.dimensions;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
+@Entity
 public class OrderDimensions implements Serializable{
     private double length;
     private double depth;
     private double height;
     private double weight;
-
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID orderDimensionsID;
+    
     public OrderDimensions(double length, double depth, double height, double weight) {
         this.length = length;
         this.depth = depth;
         this.height = height;
         this.weight = weight;
+    }
+
+    public OrderDimensions(){
+        this(0,0,0,0);
     }
 
     @Override
