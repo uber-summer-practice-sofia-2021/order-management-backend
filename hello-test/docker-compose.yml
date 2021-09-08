@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  watcher:
+    image: java-nodemon-dev-server
+    depends_on:
+      - app
+    volumes:
+      - .:/app
+    command: nodemon -e java -w /app/src -x '/app/mvnw --settings pom.xml compile'
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: java-nodemon-dev-server
+    ports:
+      - target: 5000
+        published: 5000
+        protocol: tcp
+      - target: 35729
+        published: 35729
+        protocol: tcp
+    volumes:
+      - .:/app
+    command: ./mvnw --settings pom.xml spring-boot:run
