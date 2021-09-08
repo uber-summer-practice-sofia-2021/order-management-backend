@@ -15,13 +15,14 @@ public class OrderDimensions implements Serializable{
     private double height;
     private double weight;
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID orderDimensionsID;
+    private final UUID orderDimensionsID;
     
     public OrderDimensions(double length, double depth, double height, double weight) {
         this.length = length;
         this.depth = depth;
         this.height = height;
         this.weight = weight;
+        this.orderDimensionsID = UUID.randomUUID();
     }
 
     public OrderDimensions(){

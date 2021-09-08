@@ -18,16 +18,21 @@ import java.util.UUID;
 @Entity
 public class ClientOrder {
     private String clientName;
-    private transient Address from;
-    private transient Address to;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address from;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address to;
     private String clientEmail;
     private String phoneNumber;
-    private transient OrderDimensions orderDimensions;
-    private transient List<Tags> tags;
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderDimensions orderDimensions;
+    @ElementCollection(targetClass = Tags.class)
+    private List<Tags> tags;
     private DeliveryType deliveryType;
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID ID;
-    private transient Status status;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Status status;
     private final LocalDateTime createdAt;
 
     public ClientOrder(String clientName, Address from, Address to, String clientEmail,

@@ -7,7 +7,7 @@ import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.sqlite.SQLiteException;
+//import org.sqlite.SQLiteException;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,15 +20,15 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-
-    @GetMapping("/orders")
-    public List<ClientOrder> getOrders() {
-        try {
-            return orderService.getOrders();
-        } catch(HibernateException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-        }
-    }
+//
+//    @GetMapping("/orders")
+//    public List<ClientOrder> getOrders() {
+//        try {
+//            return orderService.getOrders();
+//        } catch(HibernateException e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+//        }
+//    }
 
     @GetMapping("/orders/{id}")
     public ClientOrder getOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
@@ -47,22 +47,22 @@ public class OrderController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
-
-    @PutMapping("/orders/{id}/assign")
-    public void assign(@PathVariable UUID id) {
-        try {
-            orderService.assignOrder(id);
-        } catch(HibernateException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-        }
-    }
-
-    @PutMapping("/orders/{id}/{state}")
-    public void updateState(@PathVariable UUID id, @PathVariable State state) {
-        try {
-            orderService.updateOrderState(id, state);
-        } catch(HibernateException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-        }
-    }
+//
+//    @PutMapping("/orders/{id}/assign")
+//    public void assign(@PathVariable UUID id) {
+//        try {
+//            orderService.assignOrder(id);
+//        } catch(HibernateException e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+//        }
+//    }
+//
+//    @PutMapping("/orders/{id}/{state}")
+//    public void updateState(@PathVariable UUID id, @PathVariable State state) {
+//        try {
+//            orderService.updateOrderState(id, state);
+//        } catch(HibernateException e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+//        }
+//    }
 }

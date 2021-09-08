@@ -14,7 +14,7 @@ public class Address implements Serializable{
     private double longitude;
     private String addressName;
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID orderAdressID;
+    private final UUID orderAddressID;
 
     public Address(){
         this(0,0,"");
@@ -23,6 +23,7 @@ public class Address implements Serializable{
         this.latitude = latitude;
         this.longitude = longitude;
         this.addressName = addressName;
+        this.orderAddressID = UUID.randomUUID();
     }
 
     @Override
