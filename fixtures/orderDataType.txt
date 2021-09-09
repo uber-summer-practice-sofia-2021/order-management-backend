@@ -1,29 +1,25 @@
 *clientName: String,
 *from: Address {
-    latitude: Double,
-    longitude: Double,
+    latitude: double,
+    longitude: double,
     addressName: String
 },
 *to: Address {
-    latitude: Double,
-    longitude: Double,
+    latitude: double,
+    longitude: double,
     addressName: String
 },
 *clientEmail: String,
 phoneNumber: String,
-dimensions: OrderDimensions {
-    length: Double,
-    depth: Double,
-    height: Double,
-    weight: Double
-},
-tags: ArrayList<Enum>,
-*deliveryType: Enum,
-*ID: UUID,
-*status: Status {
-    state: Enum,
-    assigned: boolean
-},
-*createdAt: LocalDateTime
+*length: double,
+*depth: double,
+*height: double,
+*weight: double,
+tags: List<Enum>, /* DANGEROUS, FRAGILE */
+*deliveryType: Enum, /* STANDARD, EXPRESS */
+ID: UUID,
+status: Enum, /* OPEN, ASSIGNED, PICK_UP, COMPLETED, CANCELLED, FAILED */
+createdAt: LocalDateTime
+ 
  
 *required
