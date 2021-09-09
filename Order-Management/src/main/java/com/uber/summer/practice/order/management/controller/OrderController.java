@@ -3,11 +3,19 @@ package com.uber.summer.practice.order.management.controller;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 //import org.sqlite.SQLiteException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -18,15 +26,18 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-//
-//    @GetMapping("/orders")
-//    public List<ClientOrder> getOrders() {
-//        try {
-//            return orderService.getOrders();
-//        } catch(HibernateException e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-//        }
-//    }
+
+    @GetMapping("/orders")
+    public Map<String,Object> getOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int size
+            ) {
+        try {
+            return orderService.getOrders(page,size);
+        } catch(HibernateException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+        }
+    }
 
     @GetMapping("/orders/{id}")
     public ClientOrder getOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
