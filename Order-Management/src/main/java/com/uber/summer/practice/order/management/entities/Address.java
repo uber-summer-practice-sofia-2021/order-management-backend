@@ -9,16 +9,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class Address implements Serializable{
+public class Address implements Serializable {
     private double latitude;
     private double longitude;
     private String addressName;
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID orderAddressID;
 
-    public Address(){
-        this(0,0,"");
+    public Address() {
+        this(0, 0, "");
     }
+
     public Address(double latitude, double longitude, String addressName) {
         this.latitude = latitude;
         this.longitude = longitude;
