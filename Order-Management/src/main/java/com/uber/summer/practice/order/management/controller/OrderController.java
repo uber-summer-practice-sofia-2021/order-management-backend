@@ -1,6 +1,7 @@
 package com.uber.summer.practice.order.management.controller;
 
 import com.uber.summer.practice.order.management.entities.ClientOrder;
+import com.uber.summer.practice.order.management.entities.State;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 //import org.sqlite.SQLiteException;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,15 +20,15 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-//
-//    @GetMapping("/orders")
-//    public List<ClientOrder> getOrders() {
-//        try {
-//            return orderService.getOrders();
-//        } catch(HibernateException e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-//        }
-//    }
+
+    @GetMapping("/orders")
+    public List<ClientOrder> getOrders() {
+        try {
+            return orderService.getOrders();
+        } catch(HibernateException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+        }
+    }
 
     @GetMapping("/orders/{id}")
     public ClientOrder getOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
@@ -55,12 +57,12 @@ public class OrderController {
 //        }
 //    }
 //
-//    @PutMapping("/orders/{id}/{state}")
-//    public void updateState(@PathVariable UUID id, @PathVariable State state) {
-//        try {
-//            orderService.updateOrderState(id, state);
-//        } catch(HibernateException e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-//        }
-//    }
+    @PutMapping("/orders/{id}/{state}")
+    public void updateState(@PathVariable UUID id, @PathVariable State state) {
+        try {
+            orderService.updateOrderState(id, state);
+        } catch(HibernateException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+        }
+    }
 }
