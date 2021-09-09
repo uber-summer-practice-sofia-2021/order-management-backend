@@ -38,16 +38,13 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public void updateOrderState(UUID id, State state) {
+    public void updateOrderState(UUID id, Status status) {
         ClientOrder order = getOrderByID(id);
-        order.setStatus(new Status(state,true));
+        order.setStatus(status);
         orderRepository.save(order);
 
     }
 
-//    public void assignOrder(UUID id) {
-//        orderRepository.assign(id);
-//    }
 
 
 }
