@@ -4,13 +4,14 @@ import com.uber.summer.practice.order.management.entities.Status;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -21,10 +22,29 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<ClientOrder> getOrders() {
-        return orderRepository.findAll();
-    }
+    public Map<String, Object> getOrders(Optional<Map<String,String>> qp, int page, int size) {
+        qp.ifPresent(param -> param.forEach((k, v) -> {
+            System.out.println(String.format("%s : %s", k, v));
+        }));
 
+        List<ClientOrder> orders = new ArrayList<>();
+        Pageable paging = PageRequest.of(page, size);
+
+        Page<ClientOrder> pageOrder = orderRepository.findAll(paging);
+
+        orders = pageOrder.getContent();
+
+        Map<String,Object> responseMetaData = new HashMap<>();
+        responseMetaData.put("totalItems",pageOrder.getTotalElements());
+        responseMetaData.put("totalPages",pageOrder.getTotalPages());
+        responseMetaData.put("currentPage",pageOrder.getNumber());
+
+        Map<String,Object> response = new HashMap<>();
+        response.put("data",orders);
+        response.put("pagination",responseMetaData);
+
+        return response;
+    }
     public ClientOrder getOrderByID(UUID id) {
         if (orderRepository.findById(id).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data found");
