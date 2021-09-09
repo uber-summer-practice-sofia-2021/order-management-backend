@@ -1,4 +1,4 @@
-package com.uber.summer.practice.order.management.order.tags;
+package com.uber.summer.practice.order.management.entities;
 
 import java.io.Serializable;
 

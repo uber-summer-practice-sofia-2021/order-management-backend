@@ -1,11 +1,4 @@
-package com.uber.summer.practice.order.management.order;
-
-import com.uber.summer.practice.order.management.order.address.Address;
-import com.uber.summer.practice.order.management.order.deliveryType.DeliveryType;
-import com.uber.summer.practice.order.management.order.dimensions.OrderDimensions;
-import com.uber.summer.practice.order.management.order.status.Status;
-import com.uber.summer.practice.order.management.order.status.state.State;
-import com.uber.summer.practice.order.management.order.tags.Tags;
+package com.uber.summer.practice.order.management.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,7 +1,6 @@
 package com.uber.summer.practice.order.management.controller;
 
-import com.uber.summer.practice.order.management.order.ClientOrder;
-import com.uber.summer.practice.order.management.order.status.state.State;
+import com.uber.summer.practice.order.management.entities.ClientOrder;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 //import org.sqlite.SQLiteException;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

@@ -1,12 +1,10 @@
 package com.uber.summer.practice.order.management.services;
 
-import com.uber.summer.practice.order.management.dao.OrderRepository;
-import com.uber.summer.practice.order.management.order.ClientOrder;
-import com.uber.summer.practice.order.management.order.status.state.State;
+import com.uber.summer.practice.order.management.repository.OrderRepository;
+import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

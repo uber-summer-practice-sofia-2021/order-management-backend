@@ -1,6 +1,6 @@
-package com.uber.summer.practice.order.management.dao;
+package com.uber.summer.practice.order.management.repository;
 
-import com.uber.summer.practice.order.management.order.ClientOrder;
+import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import java.util.UUID;

@@ -1,6 +1,4 @@
-package com.uber.summer.practice.order.management.order.status;
-
-import com.uber.summer.practice.order.management.order.status.state.State;
+package com.uber.summer.practice.order.management.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

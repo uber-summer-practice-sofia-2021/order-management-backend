@@ -1,4 +1,4 @@
-package com.uber.summer.practice.order.management.order.dimensions;
+package com.uber.summer.practice.order.management.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
