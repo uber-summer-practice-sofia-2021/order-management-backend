@@ -1,5 +1,7 @@
 package com.uber.summer.practice.order.management.services;
 
+import com.uber.summer.practice.order.management.entities.State;
+import com.uber.summer.practice.order.management.entities.Status;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,9 +22,9 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-//    public List<ClientOrder> getOrders() {
-//        return orderRepository.findAllByCriteria();
-//    }
+    public List<ClientOrder> getOrders() {
+        return orderRepository.findAll();
+    }
 
     public ClientOrder getOrderByID(UUID id) {
         if (orderRepository.findById(id).isEmpty()) {
@@ -33,13 +37,14 @@ public class OrderService {
     public void addOrder(ClientOrder order) {
         orderRepository.save(order);
     }
-//
-//    public void updateOrderState(UUID id, State state) {
-//        orderRepository.update(id, state);
-//    }
-//    public void assignOrder(UUID id) {
-//        orderRepository.assign(id);
-//    }
+
+    public void updateOrderState(UUID id, Status status) {
+        ClientOrder order = getOrderByID(id);
+        order.setStatus(status);
+        orderRepository.save(order);
+
+    }
+
 
 
 }
