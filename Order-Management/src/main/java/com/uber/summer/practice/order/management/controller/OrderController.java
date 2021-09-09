@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 //import org.sqlite.SQLiteException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class OrderController {
@@ -29,11 +26,12 @@ public class OrderController {
 
     @GetMapping("/orders")
     public Map<String,Object> getOrders(
+            @RequestParam(required = false) Map<String,String> qp,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "1") int size
             ) {
         try {
-            return orderService.getOrders(page,size);
+            return orderService.getOrders(Optional.ofNullable(qp),page,size);
         } catch(HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
