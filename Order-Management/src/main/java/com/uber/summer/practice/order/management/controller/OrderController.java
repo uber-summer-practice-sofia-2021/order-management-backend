@@ -34,7 +34,7 @@ public class OrderController {
     public ClientOrder getOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
         try {
             return orderService.getOrderByID(id);
-        } catch(HibernateException e) {
+        } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
@@ -43,7 +43,7 @@ public class OrderController {
     public void addOrder(@RequestBody ClientOrder order) {
         try {
             orderService.addOrder(order);
-        } catch(HibernateException e) {
+        } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }

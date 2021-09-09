@@ -17,31 +17,36 @@ public class ClientOrder {
     private Address to;
     private String clientEmail;
     private String phoneNumber;
-    @OneToOne(cascade = CascadeType.ALL)
-    private OrderDimensions orderDimensions;
+    private double length;
+    private double depth;
+    private double height;
+    private double weight;
     @ElementCollection(targetClass = Tags.class)
     private List<Tags> tags;
     private DeliveryType deliveryType;
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID ID;
-    @OneToOne(cascade = CascadeType.ALL)
     private Status status;
     private final LocalDateTime createdAt;
 
     public ClientOrder(String clientName, Address from, Address to, String clientEmail,
-                       String phoneNumber, OrderDimensions orderDimensions, List<Tags> tags,
-                       DeliveryType deliveryType) {
+                       String phoneNumber, double length, double depth, double height,
+                       double weight, List<Tags> tags, DeliveryType deliveryType) {
         this.clientName = clientName;
         this.from = from;
         this.to = to;
         this.clientEmail = clientEmail;
         this.phoneNumber = phoneNumber;
-        this.orderDimensions = orderDimensions;
+        this.length = length;
+        this.depth = depth;
+        this.height = height;
+        this.weight = weight;
         this.tags = tags;
         this.deliveryType = deliveryType;
         this.ID = UUID.randomUUID();
-        this.status = new Status(State.OPEN, false);
-        this.createdAt=LocalDateTime.now();
+        this.status = Status.OPEN;
+        this.createdAt = LocalDateTime.now();
     }
 
     static final public ClientOrder CLIENT_ORDER_TEST_1 = new ClientOrder(
@@ -50,7 +55,7 @@ public class ClientOrder {
             new Address(24.4, 76.4, "Mladost 5"),
             "bobbyrx19@gmail.com",
             "02478242",
-            new OrderDimensions(12, 23.3, 4, 6),
+            12, 23.3, 4, 6,
             new ArrayList<>(Arrays.asList(Tags.DANGEROUS, Tags.FRAGILE)),
             DeliveryType.EXPRESS);
 
@@ -60,32 +65,46 @@ public class ClientOrder {
             new Address(14.4, 26.4, "Studentski grad"),
             "example@gmail.com",
             "089212342",
-            new OrderDimensions(22, 2.3, 10, 16),
+            22, 2.3, 10, 16,
             new ArrayList<>(Arrays.asList(Tags.DANGEROUS)),
             DeliveryType.STANDARD);
 
     public ClientOrder() {
         this.ID = UUID.randomUUID();
-        this.createdAt=LocalDateTime.now();
-        this.status=new Status(State.OPEN,false);
+        this.createdAt = LocalDateTime.now();
+        this.status = Status.OPEN;
     }
 
+    public double getLength() {
+        return length;
+    }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "clientName='" + clientName + '\'' +
-                ", from=" + from.toString() +
-                ", to=" + to.toString() +
-                ", clientEmail='" + clientEmail + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", orderDimensions=" + orderDimensions.toString() +
-                ", tags=" + tags +
-                ", deliveryType=" + deliveryType +
-                ", ID=" + ID +
-                ", status=" + status.toString() +
-                ", createdAt=" + createdAt +
-                "}";
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public double getDepth() {
+        return depth;
+    }
+
+    public void setDepth(double depth) {
+        this.depth = depth;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     public UUID getID() {
@@ -136,14 +155,6 @@ public class ClientOrder {
         this.phoneNumber = phoneNumber;
     }
 
-    public OrderDimensions getOrderDimensions() {
-        return orderDimensions;
-    }
-
-    public void setOrderDimensions(OrderDimensions orderDimensions) {
-        this.orderDimensions = orderDimensions;
-    }
-
     public List<Tags> getTags() {
         return tags;
     }
@@ -171,8 +182,8 @@ public class ClientOrder {
     @Override
     public int hashCode() {
         return Objects.hash(this.clientName, this.from, this.to, this.clientEmail,
-                this.phoneNumber, this.orderDimensions, this.tags, this.deliveryType, this.ID,
-                this.status, this.createdAt);
+                this.phoneNumber, this.length, this.depth, this.height, this.weight, this.tags,
+                this.deliveryType, this.ID, this.status, this.createdAt);
     }
 
     @Override
@@ -187,7 +198,10 @@ public class ClientOrder {
                 && Objects.equals(this.to, clientOrder.to)
                 && Objects.equals(this.clientEmail, clientOrder.clientName)
                 && Objects.equals(this.phoneNumber, clientOrder.phoneNumber)
-                && Objects.equals(this.orderDimensions, clientOrder.orderDimensions)
+                && Objects.equals(this.length, clientOrder.length)
+                && Objects.equals(this.depth, clientOrder.depth)
+                && Objects.equals(this.height, clientOrder.height)
+                && Objects.equals(this.weight, clientOrder.weight)
                 && Objects.equals(this.tags, clientOrder.tags)
                 && Objects.equals(this.deliveryType, clientOrder.deliveryType)
                 && Objects.equals(this.ID, clientOrder.ID)
