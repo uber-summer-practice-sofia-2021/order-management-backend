@@ -2,6 +2,7 @@ package com.uber.summer.practice.order.management.controller;
 
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import com.uber.summer.practice.order.management.entities.State;
+import com.uber.summer.practice.order.management.entities.Status;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
@@ -58,9 +59,9 @@ public class OrderController {
 //    }
 //
     @PutMapping("/orders/{id}/{state}")
-    public void updateState(@PathVariable UUID id, @PathVariable State state) {
+    public void updateState(@PathVariable UUID id, @PathVariable Status status) {
         try {
-            orderService.updateOrderState(id, state);
+            orderService.updateOrderState(id, status);
         } catch(HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
