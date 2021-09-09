@@ -1,6 +1,5 @@
 package com.uber.summer.practice.order.management.services;
 
-import com.uber.summer.practice.order.management.entities.State;
 import com.uber.summer.practice.order.management.entities.Status;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
@@ -42,9 +41,5 @@ public class OrderService {
         ClientOrder order = getOrderByID(id);
         order.setStatus(status);
         orderRepository.save(order);
-
     }
-
-
-
 }

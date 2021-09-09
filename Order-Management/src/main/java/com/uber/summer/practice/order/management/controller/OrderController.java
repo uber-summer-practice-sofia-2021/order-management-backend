@@ -1,7 +1,6 @@
 package com.uber.summer.practice.order.management.controller;
 
 import com.uber.summer.practice.order.management.entities.ClientOrder;
-import com.uber.summer.practice.order.management.entities.State;
 import com.uber.summer.practice.order.management.entities.Status;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
@@ -48,17 +47,8 @@ public class OrderController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
-//
-//    @PutMapping("/orders/{id}/assign")
-//    public void assign(@PathVariable UUID id) {
-//        try {
-//            orderService.assignOrder(id);
-//        } catch(HibernateException e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
-//        }
-//    }
-//
-    @PutMapping("/orders/{id}/{state}")
+
+    @PutMapping("/orders/{id}/{status}")
     public void updateState(@PathVariable UUID id, @PathVariable Status status) {
         try {
             orderService.updateOrderState(id, status);
