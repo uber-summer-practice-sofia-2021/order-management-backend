@@ -7,9 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
 public interface OrderRepository extends JpaRepository<ClientOrder, UUID> {
-    Page<ClientOrder> findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTags(double weight, double height, double length, double depth,Tags tag,Pageable pageable);
+//    Page<ClientOrder> findByTagsIn(List<Tags> tags,Pageable pageable);
+//    Page<ClientOrder> findByTagsIsIn(List<Tags> tags,Pageable pageable);
+    Page<ClientOrder> findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(double weight, double height, double length, double depth,List<Tags> tags,Pageable pageable);
+//    Page<ClientOrder> findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThan(double weight, double height, double length, double depth,Pageable pageable);
 }

@@ -5,7 +5,6 @@ import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.ClassEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.*;
 
 @Service
@@ -25,30 +23,42 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Map<String, Object> getOrders(Optional<Map<String,String>> qp, int page, int size) {
+    public Map<String, Object> getOrders(Optional<String> max_weight,
+                                         Optional<String> max_height,
+                                         Optional<String> max_length,
+                                         Optional<String> max_width,
+                                         Optional<List<Tags>> tags,int page, int size) {
         Pageable paging = PageRequest.of(page, size);
 
-        System.out.println(qp);
         double max_w = Double.MAX_VALUE;
         double max_h = Double.MAX_VALUE;
-        double max_d = Double.MAX_VALUE;
+        double max_wid = Double.MAX_VALUE;
         double max_l = Double.MAX_VALUE;
-        // TODO Add all tags
-        String tag = "";
-        //Default value of Tags -> NONE ????
-        for(Map.Entry<String,String> param : qp.get().entrySet()) {
-            switch (param.getKey()) {
-                case "max_weight" : max_w = Double.parseDouble(param.getValue());
-                case "max_height" : max_h = Double.parseDouble(param.getValue());
-                case "max_depth" : max_d = Double.parseDouble(param.getValue());
-                case "max_length" : max_l = Double.parseDouble(param.getValue());
-                case "tag" : tag = param.getValue();
-                //default?
-            }
+        List<Tags> tagsList = new ArrayList<>();
+
+        Page<ClientOrder> pageOrder;
+
+        if(max_weight.isPresent()) {
+            max_w = Double.parseDouble(max_weight.get());
         }
 
-        Page<ClientOrder> pageOrder = orderRepository.findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTags(max_w,max_h,max_l,max_d,Tags.valueOf(tag),paging);
+        if(max_height.isPresent()) {
+            max_h = Double.parseDouble(max_height.get());
+        }
 
+        if(max_length.isPresent()) {
+            max_l = Double.parseDouble(max_length.get());
+        }
+
+        if(max_width.isPresent()) {
+            max_wid = Double.parseDouble(max_width.get());
+        }
+
+        tags.ifPresent(tagsList::addAll);
+        System.out.println(tagsList);
+
+        pageOrder = orderRepository.findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(max_w,max_h,max_l,max_wid,tagsList,paging);
+//        Page<ClientOrder> pageOrder = orderRepository.findByTagsIn(tagsList,paging);
         List<ClientOrder> orders = new ArrayList<>();
 
         orders = pageOrder.getContent();
