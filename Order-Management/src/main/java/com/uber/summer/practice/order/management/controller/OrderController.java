@@ -30,6 +30,7 @@ public class OrderController {
             @RequestParam(defaultValue = "1") int size
     ) {
         try {
+            System.out.println(qp);
             return orderService.getOrders(Optional.ofNullable(qp),page,size);
         } catch(HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);

@@ -1,6 +1,7 @@
 package com.uber.summer.practice.order.management.services;
 
 import com.uber.summer.practice.order.management.entities.Status;
+import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.*;
 
 @Service
@@ -23,14 +25,42 @@ public class OrderService {
     }
 
     public Map<String, Object> getOrders(Optional<Map<String,String>> qp, int page, int size) {
-        qp.ifPresent(param -> param.forEach((k, v) -> {
-            System.out.println(String.format("%s : %s", k, v));
-        }));
+        Pageable paging = PageRequest.of(page, size);
+        System.out.println(qp);
+        double max_w = Double.MAX_VALUE;
+        double max_h = Double.MAX_VALUE;
+        double max_d = Double.MAX_VALUE;
+        double max_l = Double.MAX_VALUE;
+        // TODO Add all tags
+        String tag = "";
+        //Default value of Tags -> NONE ????
+        for(Map.Entry<String,String> param : qp.get().entrySet()) {
+            switch (param.getKey()) {
+                case "max_weight" : max_w = Double.parseDouble(param.getValue());
+                case "max_height" : max_h = Double.parseDouble(param.getValue());
+                case "max_depth" : max_d = Double.parseDouble(param.getValue());
+                case "max_length" : max_l = Double.parseDouble(param.getValue());
+                case "tag" : tag = param.getValue();
+                //default?
+            }
+        }
+//
+//        List<ClientOrder> pageOrderWeight = orderRepository.findByWeightIsLessThan(max_w).getContent();
+//        List<ClientOrder> pageOrderHeight = orderRepository.findByHeightIsLessThan(max_h).getContent();
+//        List<ClientOrder> pageOrderLength = orderRepository.findByLengthIsLessThan(max_l,paging).getContent();
+//        List<ClientOrder> pageOrderDepth = new ArrayList<>();
+//        List<ClientOrder> pageOrderTags = new ArrayList<>();
+//        pageOrderList.add(orderRepository.findByWeightIsLessThan(max_w,paging));
+//        pageOrderList.add(orderRepository.findByHeightIsLessThan(max_h,paging));
+//        pageOrderList.add(orderRepository.findByLengthIsLessThan(max_l,paging));
+//        pageOrderList.add(orderRepository.findByDepthIsLessThan(max_d,paging));
+//        pageOrderList.add(orderRepository.findByTags(Tags.valueOf(tag),paging));
+//
+
+
+        Page<ClientOrder> pageOrder = orderRepository.findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTags(max_w,max_h,max_l,max_d,Tags.valueOf(tag),paging);
 
         List<ClientOrder> orders = new ArrayList<>();
-        Pageable paging = PageRequest.of(page, size);
-
-        Page<ClientOrder> pageOrder = orderRepository.findAll(paging);
 
         orders = pageOrder.getContent();
 
@@ -45,6 +75,7 @@ public class OrderService {
 
         return response;
     }
+
     public ClientOrder getOrderByID(UUID id) {
         if (orderRepository.findById(id).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data found");
