@@ -6,6 +6,7 @@ import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 //import org.sqlite.SQLiteException;
@@ -58,19 +59,19 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public void addOrder(@RequestBody ClientOrder order) {
+    public ResponseEntity<Map<String, Object>> addOrder(@RequestBody ClientOrder order) {
         try {
-            orderService.addOrder(order);
+            return orderService.addOrder(order);
         } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
 
-    @PutMapping("/orders/{id}/{status}")
-    public void updateState(@PathVariable UUID id, @PathVariable Status status) {
+    @PostMapping("/orders/{id}/{status}")
+    public ResponseEntity<Map<String, Object>> updateState(@PathVariable UUID id, @PathVariable Status status) {
         try {
-            orderService.updateOrderState(id, status);
-        } catch(HibernateException e) {
+            return orderService.updateOrderState(id, status);
+        } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
