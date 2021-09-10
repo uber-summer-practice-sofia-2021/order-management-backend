@@ -5,6 +5,7 @@ import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.ClassEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ public class OrderService {
 
     public Map<String, Object> getOrders(Optional<Map<String,String>> qp, int page, int size) {
         Pageable paging = PageRequest.of(page, size);
+
         System.out.println(qp);
         double max_w = Double.MAX_VALUE;
         double max_h = Double.MAX_VALUE;
@@ -44,19 +46,6 @@ public class OrderService {
                 //default?
             }
         }
-//
-//        List<ClientOrder> pageOrderWeight = orderRepository.findByWeightIsLessThan(max_w).getContent();
-//        List<ClientOrder> pageOrderHeight = orderRepository.findByHeightIsLessThan(max_h).getContent();
-//        List<ClientOrder> pageOrderLength = orderRepository.findByLengthIsLessThan(max_l,paging).getContent();
-//        List<ClientOrder> pageOrderDepth = new ArrayList<>();
-//        List<ClientOrder> pageOrderTags = new ArrayList<>();
-//        pageOrderList.add(orderRepository.findByWeightIsLessThan(max_w,paging));
-//        pageOrderList.add(orderRepository.findByHeightIsLessThan(max_h,paging));
-//        pageOrderList.add(orderRepository.findByLengthIsLessThan(max_l,paging));
-//        pageOrderList.add(orderRepository.findByDepthIsLessThan(max_d,paging));
-//        pageOrderList.add(orderRepository.findByTags(Tags.valueOf(tag),paging));
-//
-
 
         Page<ClientOrder> pageOrder = orderRepository.findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTags(max_w,max_h,max_l,max_d,Tags.valueOf(tag),paging);
 
