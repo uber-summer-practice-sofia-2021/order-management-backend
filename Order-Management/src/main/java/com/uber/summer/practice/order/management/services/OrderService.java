@@ -1,14 +1,14 @@
 package com.uber.summer.practice.order.management.services;
 
 import com.uber.summer.practice.order.management.entities.Status;
-import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
-import org.hibernate.HibernateException;
+import com.uber.summer.practice.order.management.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -55,7 +55,7 @@ public class OrderService {
     }
 
 
-    public void addOrder(ClientOrder order) {
+    public ResponseEntity<Map<String,Object>> addOrder(ClientOrder order) {
         if (order.getFrom().equals(order.getTo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order has two equal addresses!");
         } else if (order.getLength() < 0
@@ -65,10 +65,15 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dimensions should be positive number!");
         } else {
             orderRepository.save(order);
+
+            Map<String,Object> response = new HashMap<>();
+            response.put("Order info",order);
+            response.put("Order","created");
+            return new ResponseEntity<>(response,HttpStatus.CREATED);
         }
     }
 
-    public void updateOrderState(UUID id, Status status) {
+    public ResponseEntity<Map<String,Object>> updateOrderState(UUID id, Status status) {
         ClientOrder order = getOrderByID(id);
         boolean isCorrectStatusChange = false;
         switch (order.getStatus()) {
@@ -93,6 +98,10 @@ public class OrderService {
         if (isCorrectStatusChange) {
             order.setStatus(status);
             orderRepository.save(order);
+            Map<String,Object> response = new HashMap<>();
+            response.put("Order info",order);
+            response.put("Order","updated");
+            return  new ResponseEntity<>(response,HttpStatus.ACCEPTED);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong state transition!");
         }

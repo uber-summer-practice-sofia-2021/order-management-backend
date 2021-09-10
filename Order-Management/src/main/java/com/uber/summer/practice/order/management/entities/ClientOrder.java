@@ -25,7 +25,6 @@ public class ClientOrder {
     private List<Tags> tags;
     private DeliveryType deliveryType;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID ID;
     private Status status;
     private final LocalDateTime createdAt;
