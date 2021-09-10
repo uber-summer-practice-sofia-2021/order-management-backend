@@ -1,9 +1,9 @@
 package com.uber.summer.practice.order.management.services;
 
 import com.uber.summer.practice.order.management.entities.Status;
+import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,26 +23,54 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Map<String, Object> getOrders(Optional<Map<String, String>> qp, int page, int size) {
-        qp.ifPresent(param -> param.forEach((k, v) -> {
-            System.out.println(String.format("%s : %s", k, v));
-        }));
-
-        List<ClientOrder> orders = new ArrayList<>();
+    public Map<String, Object> getOrders(Optional<String> max_weight,
+                                         Optional<String> max_height,
+                                         Optional<String> max_length,
+                                         Optional<String> max_width,
+                                         Optional<List<Tags>> tags,int page, int size) {
         Pageable paging = PageRequest.of(page, size);
 
-        Page<ClientOrder> pageOrder = orderRepository.findAll(paging);
+        double max_w = Double.MAX_VALUE;
+        double max_h = Double.MAX_VALUE;
+        double max_wid = Double.MAX_VALUE;
+        double max_l = Double.MAX_VALUE;
+        List<Tags> tagsList = new ArrayList<>();
+
+        Page<ClientOrder> pageOrder;
+
+        if(max_weight.isPresent()) {
+            max_w = Double.parseDouble(max_weight.get());
+        }
+
+        if(max_height.isPresent()) {
+            max_h = Double.parseDouble(max_height.get());
+        }
+
+        if(max_length.isPresent()) {
+            max_l = Double.parseDouble(max_length.get());
+        }
+
+        if(max_width.isPresent()) {
+            max_wid = Double.parseDouble(max_width.get());
+        }
+
+        tags.ifPresent(tagsList::addAll);
+        System.out.println(tagsList);
+
+        pageOrder = orderRepository.findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(max_w,max_h,max_l,max_wid,tagsList,paging);
+//        Page<ClientOrder> pageOrder = orderRepository.findByTagsIn(tagsList,paging);
+        List<ClientOrder> orders = new ArrayList<>();
 
         orders = pageOrder.getContent();
 
-        Map<String, Object> responseMetaData = new HashMap<>();
-        responseMetaData.put("totalItems", pageOrder.getTotalElements());
-        responseMetaData.put("totalPages", pageOrder.getTotalPages());
-        responseMetaData.put("currentPage", pageOrder.getNumber());
+        Map<String,Object> responseMetaData = new HashMap<>();
+        responseMetaData.put("totalItems",pageOrder.getTotalElements());
+        responseMetaData.put("totalPages",pageOrder.getTotalPages());
+        responseMetaData.put("currentPage",pageOrder.getNumber());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("data", orders);
-        response.put("pagination", responseMetaData);
+        Map<String,Object> response = new HashMap<>();
+        response.put("data",orders);
+        response.put("pagination",responseMetaData);
 
         return response;
     }
@@ -56,45 +84,12 @@ public class OrderService {
 
 
     public void addOrder(ClientOrder order) {
-        if (order.getFrom().equals(order.getTo())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order has two equal addresses!");
-        } else if (order.getLength() < 0
-                || order.getDepth() < 0
-                || order.getHeight() < 0
-                || order.getWeight() < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dimensions should be positive number!");
-        } else {
-            orderRepository.save(order);
-        }
+        orderRepository.save(order);
     }
 
     public void updateOrderState(UUID id, Status status) {
         ClientOrder order = getOrderByID(id);
-        boolean isCorrectStatusChange = false;
-        switch (order.getStatus()) {
-            case OPEN:
-                if (status.equals(Status.ASSIGNED) || status.equals(Status.CANCELLED)) {
-                    isCorrectStatusChange = true;
-                }
-                break;
-            case ASSIGNED:
-                if (status.equals(Status.PICK_UP)) {
-                    isCorrectStatusChange = true;
-                }
-                break;
-            case PICK_UP:
-                if (status.equals(Status.COMPLETED) || status.equals(Status.FAILED)) {
-                    isCorrectStatusChange = true;
-                }
-                break;
-            default:
-                break;
-        }
-        if (isCorrectStatusChange) {
-            order.setStatus(status);
-            orderRepository.save(order);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong state transition!");
-        }
+        order.setStatus(status);
+        orderRepository.save(order);
     }
 }
