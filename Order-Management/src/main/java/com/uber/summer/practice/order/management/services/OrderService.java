@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.*;
 
 @Service
@@ -22,7 +23,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Map<String, Object> getOrders(Optional<Map<String,String>> qp, int page, int size) {
+    public Map<String, Object> getOrders(Optional<Map<String, String>> qp, int page, int size) {
         qp.ifPresent(param -> param.forEach((k, v) -> {
             System.out.println(String.format("%s : %s", k, v));
         }));
@@ -34,17 +35,18 @@ public class OrderService {
 
         orders = pageOrder.getContent();
 
-        Map<String,Object> responseMetaData = new HashMap<>();
-        responseMetaData.put("totalItems",pageOrder.getTotalElements());
-        responseMetaData.put("totalPages",pageOrder.getTotalPages());
-        responseMetaData.put("currentPage",pageOrder.getNumber());
+        Map<String, Object> responseMetaData = new HashMap<>();
+        responseMetaData.put("totalItems", pageOrder.getTotalElements());
+        responseMetaData.put("totalPages", pageOrder.getTotalPages());
+        responseMetaData.put("currentPage", pageOrder.getNumber());
 
-        Map<String,Object> response = new HashMap<>();
-        response.put("data",orders);
-        response.put("pagination",responseMetaData);
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", orders);
+        response.put("pagination", responseMetaData);
 
         return response;
     }
+
     public ClientOrder getOrderByID(UUID id) {
         if (orderRepository.findById(id).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data found");
@@ -54,7 +56,16 @@ public class OrderService {
 
 
     public void addOrder(ClientOrder order) {
-        orderRepository.save(order);
+        if (order.getFrom().equals(order.getTo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order has two equal addresses!");
+        } else if (order.getLength() < 0
+                || order.getDepth() < 0
+                || order.getHeight() < 0
+                || order.getWeight() < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dimensions should be positive number!");
+        } else {
+            orderRepository.save(order);
+        }
     }
 
     public void updateOrderState(UUID id, Status status) {
