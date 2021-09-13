@@ -28,7 +28,7 @@ public class OrderService {
                                          Optional<String> max_height,
                                          Optional<String> max_length,
                                          Optional<String> max_width,
-                                         Optional<List<Tags>> tags,int page, int size) {
+                                         Optional<List<Tags>> tags, int page, int size) {
         Pageable paging = PageRequest.of(page, size);
 
         double max_w = Double.MAX_VALUE;
@@ -39,51 +39,51 @@ public class OrderService {
 
         Page<ClientOrder> pageOrder;
 
-        if(max_weight.isPresent()) {
+        if (max_weight.isPresent()) {
             max_w = Double.parseDouble(max_weight.get());
         }
 
-        if(max_height.isPresent()) {
+        if (max_height.isPresent()) {
             max_h = Double.parseDouble(max_height.get());
         }
 
-        if(max_length.isPresent()) {
+        if (max_length.isPresent()) {
             max_l = Double.parseDouble(max_length.get());
         }
 
-        if(max_width.isPresent()) {
+        if (max_width.isPresent()) {
             max_wid = Double.parseDouble(max_width.get());
         }
 
         tags.ifPresent(tagsList::addAll);
 
-        pageOrder = orderRepository.findClientOrdersByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(Status.OPEN,max_w,max_h,max_l,max_wid,tagsList,paging);
+        pageOrder = orderRepository.findClientOrdersByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(Status.OPEN, max_w, max_h, max_l, max_wid, tagsList, paging);
 
         List<ClientOrder> orders = new ArrayList<>();
 
 
         orders = pageOrder.getContent();
 
-        Map<String,Object> responseMetaData = new LinkedHashMap<>();
-        Integer next = null,prev = null;
+        Map<String, Object> responseMetaData = new LinkedHashMap<>();
+        Integer next = null, prev = null;
 
-        if(pageOrder.hasNext()) {
+        if (pageOrder.hasNext()) {
             next = pageOrder.nextPageable().getPageNumber();
         }
 
-        if(pageOrder.hasPrevious()) {
+        if (pageOrder.hasPrevious()) {
             prev = pageOrder.previousPageable().getPageNumber();
         }
 
-        responseMetaData.put("next",next);
-        responseMetaData.put("prev",prev);
-        responseMetaData.put("totalItems",pageOrder.getTotalElements());
-        responseMetaData.put("totalPages",pageOrder.getTotalPages());
-        responseMetaData.put("currentPage",pageOrder.getNumber());
+        responseMetaData.put("next", next);
+        responseMetaData.put("prev", prev);
+        responseMetaData.put("totalItems", pageOrder.getTotalElements());
+        responseMetaData.put("totalPages", pageOrder.getTotalPages());
+        responseMetaData.put("currentPage", pageOrder.getNumber());
 
-        Map<String,Object> response = new LinkedHashMap<>();
-        response.put("data",orders);
-        response.put("pagination",responseMetaData);
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("data", orders);
+        response.put("pagination", responseMetaData);
 
         return response;
     }
@@ -96,8 +96,7 @@ public class OrderService {
     }
 
 
-
-    public ResponseEntity<Map<String,Object>> addOrder(ClientOrder order) {
+    public ResponseEntity<Map<String, Object>> addOrder(ClientOrder order) {
         if (order.getFrom().equals(order.getTo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order has two equal addresses!");
         } else if (order.getLength() < 0
@@ -108,15 +107,15 @@ public class OrderService {
         } else {
             orderRepository.save(order);
 
-            Map<String,Object> response = new HashMap<>();
-            response.put("Order info",order);
-            response.put("Order","created");
-            return new ResponseEntity<>(response,HttpStatus.CREATED);
+            Map<String, Object> response = new HashMap<>();
+            response.put("Order info", order);
+            response.put("Order", "created");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
     }
 
-    public ResponseEntity<Map<String,Object>> updateOrderState(UUID id, Status status) {
+    public ResponseEntity<Map<String, Object>> updateOrderState(UUID id, Status status) {
         ClientOrder order = getOrderByID(id);
 
         boolean isCorrectStatusChange = false;
@@ -142,12 +141,23 @@ public class OrderService {
         if (isCorrectStatusChange) {
             order.setStatus(status);
             orderRepository.save(order);
-            Map<String,Object> response = new HashMap<>();
-            response.put("Order info",order);
-            response.put("Order","updated");
-            return  new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+            Map<String, Object> response = new HashMap<>();
+            response.put("Order info", order);
+            response.put("Order", "updated");
+            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong state transition!");
         }
+    }
+
+    public ResponseEntity<Map<String, Object>> deleteOrderByID(UUID id) {
+        if (orderRepository.findById(id).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data found");
+        }
+        orderRepository.deleteById(id);
+        Map<String, Object> response = new HashMap<>();
+//        response.put("Order info", orderRepository.findById(id).get());
+        response.put("Order", "deleted");
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }
