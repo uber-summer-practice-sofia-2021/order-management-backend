@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public Map<String,Object> getOrders(
+    public Map<String, Object> getOrders(
             @RequestParam(required = false) String max_weight,
             @RequestParam(required = false) String max_height,
             @RequestParam(required = false) String max_length,
@@ -37,11 +37,11 @@ public class OrderController {
     ) {
         try {
             return orderService.getOrders(Optional.ofNullable(max_weight),
-                                          Optional.ofNullable(max_height),
-                                          Optional.ofNullable(max_length),
-                                          Optional.ofNullable(max_width),
-                                          Optional.ofNullable(tags),page,size);
-        } catch(HibernateException e) {
+                    Optional.ofNullable(max_height),
+                    Optional.ofNullable(max_length),
+                    Optional.ofNullable(max_width),
+                    Optional.ofNullable(tags), page, size);
+        } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
@@ -69,6 +69,15 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> updateState(@PathVariable UUID id, @PathVariable Status status) {
         try {
             return orderService.updateOrderState(id, status);
+        } catch (HibernateException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+        }
+    }
+
+    @DeleteMapping("/orders/{id}")
+    public ResponseEntity<Map<String, Object>> deleteOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
+        try {
+            return orderService.deleteOrderByID(id);
         } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
