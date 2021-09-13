@@ -56,20 +56,32 @@ public class OrderService {
         }
 
         tags.ifPresent(tagsList::addAll);
-        System.out.println(tagsList);
 
-        pageOrder = orderRepository.findClientOrdersByWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(max_w,max_h,max_l,max_wid,tagsList,paging);
-//        Page<ClientOrder> pageOrder = orderRepository.findByTagsIn(tagsList,paging);
+        pageOrder = orderRepository.findClientOrdersByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(Status.OPEN,max_w,max_h,max_l,max_wid,tagsList,paging);
+
         List<ClientOrder> orders = new ArrayList<>();
+
 
         orders = pageOrder.getContent();
 
-        Map<String,Object> responseMetaData = new HashMap<>();
+        Map<String,Object> responseMetaData = new LinkedHashMap<>();
+        Integer next = null,prev = null;
+
+        if(pageOrder.hasNext()) {
+            next = pageOrder.nextPageable().getPageNumber();
+        }
+
+        if(pageOrder.hasPrevious()) {
+            prev = pageOrder.previousPageable().getPageNumber();
+        }
+
+        responseMetaData.put("next",next);
+        responseMetaData.put("prev",prev);
         responseMetaData.put("totalItems",pageOrder.getTotalElements());
         responseMetaData.put("totalPages",pageOrder.getTotalPages());
         responseMetaData.put("currentPage",pageOrder.getNumber());
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String,Object> response = new LinkedHashMap<>();
         response.put("data",orders);
         response.put("pagination",responseMetaData);
 

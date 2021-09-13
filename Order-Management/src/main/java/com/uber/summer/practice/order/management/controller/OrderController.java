@@ -33,11 +33,9 @@ public class OrderController {
             @RequestParam(required = false) String max_width,
             @RequestParam(required = false) List<Tags> tags,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "1") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         try {
-//            System.out.println(qp);
-            System.out.println(tags);
             return orderService.getOrders(Optional.ofNullable(max_weight),
                                           Optional.ofNullable(max_height),
                                           Optional.ofNullable(max_length),
