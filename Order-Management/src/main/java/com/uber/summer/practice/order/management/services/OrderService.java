@@ -57,8 +57,8 @@ public class OrderService {
 
         tags.ifPresent(tagsList::addAll);
 
-        pageOrder = orderRepository.findClientOrdersByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(Status.OPEN,max_w,max_h,max_l,max_wid,tagsList,paging);
-
+//        pageOrder = orderRepository.findClientOrdersByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(Status.OPEN,max_w,max_h,max_l,max_wid,tagsList,paging);
+        pageOrder = orderRepository.findClientOrder(Status.OPEN,max_w,max_h,max_l,max_wid,tagsList,paging);
         List<ClientOrder> orders = new ArrayList<>();
 
 
