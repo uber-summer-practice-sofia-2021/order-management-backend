@@ -108,8 +108,8 @@ public class OrderService {
             orderRepository.save(order);
 
             Map<String, Object> response = new HashMap<>();
-            response.put("Order info", order);
-            response.put("Order", "created");
+            response.put("Order ID", order.getID());
+            response.put("Order status", "created");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
@@ -142,8 +142,8 @@ public class OrderService {
             order.setStatus(status);
             orderRepository.save(order);
             Map<String, Object> response = new HashMap<>();
-            response.put("Order info", order);
-            response.put("Order", "updated");
+            response.put("Order ID", order.getID());
+            response.put("Order status", "updated");
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong state transition!");
@@ -157,7 +157,7 @@ public class OrderService {
         orderRepository.deleteById(id);
         Map<String, Object> response = new HashMap<>();
 //        response.put("Order info", orderRepository.findById(id).get());
-        response.put("Order", "deleted");
+        response.put("Order status", "deleted");
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }
