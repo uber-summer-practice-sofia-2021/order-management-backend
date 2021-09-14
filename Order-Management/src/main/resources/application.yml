@@ -5,3 +5,7 @@ spring:
     datasource:
         url: jdbc:sqlite:orders.db
         driver-class-name: org.sqlite.JDBC
+
+server:
+    error:
+        include-message: always
