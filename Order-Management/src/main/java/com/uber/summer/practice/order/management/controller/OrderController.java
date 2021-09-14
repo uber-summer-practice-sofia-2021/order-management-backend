@@ -25,14 +25,14 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public Map<String,Object> getOrders(
+    public Map<String, Object> getOrders(
             @RequestParam(required = false) String max_weight,
             @RequestParam(required = false) String max_height,
             @RequestParam(required = false) String max_length,
             @RequestParam(required = false) String max_width,
             @RequestParam(required = false) List<Tags> tags,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "1") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         try {
             System.out.println(tags);
@@ -70,6 +70,15 @@ public class OrderController {
         try {
             return orderService.updateOrderState(id, status);
         } catch (Throwable e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+        }
+    }
+
+    @DeleteMapping("/orders/{id}")
+    public ResponseEntity<Map<String, Object>> deleteOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
+        try {
+            return orderService.deleteOrderByID(id);
+        } catch (HibernateException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
         }
     }
