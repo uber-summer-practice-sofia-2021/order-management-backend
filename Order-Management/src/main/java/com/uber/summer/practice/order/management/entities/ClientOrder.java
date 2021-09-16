@@ -19,9 +19,10 @@ public class ClientOrder {
     private double height;
     private double weight;
     @ElementCollection(targetClass = Tags.class)
+    @Enumerated(EnumType.STRING)
     private List<Tags> tags;
     private DeliveryType deliveryType;
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID ID;
     private Status status;
     private final LocalDateTime createdAt;
@@ -38,37 +39,23 @@ public class ClientOrder {
         this.depth = depth;
         this.height = height;
         this.weight = weight;
-        this.tags = tags;
+        if(tags.isEmpty()) {
+            this.tags.add(Tags.NOTAG);
+        }
+        else {
+            this.tags = tags;
+        }
         this.deliveryType = deliveryType;
         this.ID = UUID.randomUUID();
         this.status = Status.OPEN;
         this.createdAt = LocalDateTime.now();
     }
 
-    static final public ClientOrder CLIENT_ORDER_TEST_1 = new ClientOrder(
-            "Borislav",
-            new Address(12.4, 32.5, "Mladost 1"),
-            new Address(24.4, 76.4, "Mladost 5"),
-            "bobbyrx19@gmail.com",
-            "02478242",
-            12, 23.3, 4, 6,
-            new ArrayList<>(Arrays.asList(Tags.DANGEROUS, Tags.FRAGILE)),
-            DeliveryType.EXPRESS);
-
-    static final public ClientOrder CLIENT_ORDER_TEST_2 = new ClientOrder(
-            "Ivan Todorov",
-            new Address(32.4, 322.5, "Ovcha kupel"),
-            new Address(14.4, 26.4, "Studentski grad"),
-            "example@gmail.com",
-            "089212342",
-            22, 2.3, 10, 16,
-            new ArrayList<>(Arrays.asList(Tags.DANGEROUS)),
-            DeliveryType.STANDARD);
-
     public ClientOrder() {
         this.ID = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.status = Status.OPEN;
+        this.tags = new ArrayList<>(Collections.singletonList(Tags.NOTAG));
     }
 
     public double getLength() {
@@ -156,7 +143,13 @@ public class ClientOrder {
     }
 
     public void setTags(List<Tags> tags) {
-        this.tags = tags;
+        if(this.tags.contains(Tags.NOTAG)){
+            this.tags = tags;
+        }
+
+        if(tags.isEmpty()) {
+            this.tags.add(Tags.NOTAG);
+        }
     }
 
     public DeliveryType getDeliveryType() {
