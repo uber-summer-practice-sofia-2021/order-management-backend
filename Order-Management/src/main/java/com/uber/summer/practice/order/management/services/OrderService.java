@@ -54,7 +54,7 @@ public class OrderService {
         tagsList.add(Tags.NOTAG);
         tags.ifPresent(tagsList::addAll);
 
-        List<ClientOrder> orderList = orderRepository.findDistinctByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThan(Status.OPEN, max_w, max_h, max_l, max_wid);
+        List<ClientOrder> orderList = orderRepository.findDistinctByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndWidthIsLessThan(Status.OPEN, max_w, max_h, max_l, max_wid);
 
         List<ClientOrder> result = new ArrayList<>();
         for (ClientOrder o : orderList) {
@@ -124,7 +124,7 @@ public class OrderService {
         if (order.getFrom().equals(order.getTo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order has two equal addresses!");
         } else if (order.getLength() < 0
-                || order.getDepth() < 0
+                || order.getWidth() < 0
                 || order.getHeight() < 0
                 || order.getWeight() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dimensions should be positive number!");
