@@ -5,9 +5,7 @@ import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.repository.OrderRepository;
 import com.uber.summer.practice.order.management.entities.ClientOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,6 @@ public class OrderService {
                                          Optional<String> max_length,
                                          Optional<String> max_width,
                                          Optional<List<Tags>> tags, int page, int size) {
-        Pageable paging = PageRequest.of(page, size);
 
         double max_w = Double.MAX_VALUE;
         double max_h = Double.MAX_VALUE;
@@ -37,7 +34,6 @@ public class OrderService {
         double max_l = Double.MAX_VALUE;
         List<Tags> tagsList = new ArrayList<>();
 
-        Page<ClientOrder> pageOrder;
 
         if (max_weight.isPresent()) {
             max_w = Double.parseDouble(max_weight.get());
@@ -55,34 +51,62 @@ public class OrderService {
             max_wid = Double.parseDouble(max_width.get());
         }
 
+        tagsList.add(Tags.NOTAG);
         tags.ifPresent(tagsList::addAll);
 
-        pageOrder = orderRepository.findClientOrdersByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThanAndTagsIn(Status.OPEN, max_w, max_h, max_l, max_wid, tagsList, paging);
+        List<ClientOrder> orderList = orderRepository.findDistinctByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThan(Status.OPEN, max_w, max_h, max_l, max_wid);
 
-        List<ClientOrder> orders = new ArrayList<>();
+        List<ClientOrder> result = new ArrayList<>();
+        for (ClientOrder o : orderList) {
+            boolean toAdd = true;
+            List<Tags> orderTags = o.getTags();
+            for (Tags t : orderTags) {
+                if (!tagsList.contains(t)) {
+                    toAdd = false;
+                    break;
+                }
+            }
+            if (toAdd) {
+                result.add(o);
+            }
+        }
 
+        Integer nextPage = null,
+                prevPage = null;
 
-        orders = pageOrder.getContent();
+        PagedListHolder<ClientOrder> customPage = new PagedListHolder();
+        customPage.setSource(result);
+        customPage.setPageSize(size);
+
+        if (page < customPage.getPageCount()) {
+            customPage.setPage(page);
+        } else {
+            page = 0;
+        }
 
         Map<String, Object> responseMetaData = new LinkedHashMap<>();
-        Integer next = null, prev = null;
-
-        if (pageOrder.hasNext()) {
-            next = pageOrder.nextPageable().getPageNumber();
+        if (customPage.getPageCount() != 1) {
+            if (customPage.isLastPage()) {
+                prevPage = page - 1;
+            }
+            if (customPage.isFirstPage()) {
+                nextPage = page + 1;
+            }
         }
 
-        if (pageOrder.hasPrevious()) {
-            prev = pageOrder.previousPageable().getPageNumber();
+        if (!customPage.isFirstPage() && !customPage.isLastPage()) {
+            prevPage = page - 1;
+            nextPage = page + 1;
         }
 
-        responseMetaData.put("next", next);
-        responseMetaData.put("prev", prev);
-        responseMetaData.put("totalItems", pageOrder.getTotalElements());
-        responseMetaData.put("totalPages", pageOrder.getTotalPages());
-        responseMetaData.put("currentPage", pageOrder.getNumber());
+        responseMetaData.put("next", nextPage);
+        responseMetaData.put("prev", prevPage);
+        responseMetaData.put("totalItems", customPage.getNrOfElements());
+        responseMetaData.put("totalPages", customPage.getPageCount());
+        responseMetaData.put("currentPage", customPage.getPage());
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("data", orders);
+        response.put("data", customPage.getPageList());
         response.put("pagination", responseMetaData);
 
         return response;
@@ -156,7 +180,6 @@ public class OrderService {
         }
         orderRepository.deleteById(id);
         Map<String, Object> response = new HashMap<>();
-//        response.put("Order info", orderRepository.findById(id).get());
         response.put("Order status", "deleted");
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
