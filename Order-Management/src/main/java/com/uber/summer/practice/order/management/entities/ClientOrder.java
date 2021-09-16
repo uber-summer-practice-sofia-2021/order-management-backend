@@ -15,7 +15,7 @@ public class ClientOrder {
     private String clientEmail;
     private String phoneNumber;
     private double length;
-    private double depth;
+    private double width;
     private double height;
     private double weight;
     @ElementCollection(targetClass = Tags.class)
@@ -28,7 +28,7 @@ public class ClientOrder {
     private final LocalDateTime createdAt;
 
     public ClientOrder(String clientName, Address from, Address to, String clientEmail,
-                       String phoneNumber, double length, double depth, double height,
+                       String phoneNumber, double length, double width, double height,
                        double weight, List<Tags> tags, DeliveryType deliveryType) {
         this.clientName = clientName;
         this.from = from;
@@ -36,7 +36,7 @@ public class ClientOrder {
         this.clientEmail = clientEmail;
         this.phoneNumber = phoneNumber;
         this.length = length;
-        this.depth = depth;
+        this.width = width;
         this.height = height;
         this.weight = weight;
         if(tags.isEmpty()) {
@@ -66,12 +66,12 @@ public class ClientOrder {
         this.length = length;
     }
 
-    public double getDepth() {
-        return depth;
+    public double getWidth() {
+        return width;
     }
 
-    public void setDepth(double depth) {
-        this.depth = depth;
+    public void setWidth(double width) {
+        this.width = width;
     }
 
     public double getHeight() {
@@ -171,7 +171,7 @@ public class ClientOrder {
     @Override
     public int hashCode() {
         return Objects.hash(this.clientName, this.from, this.to, this.clientEmail,
-                this.phoneNumber, this.length, this.depth, this.height, this.weight, this.tags,
+                this.phoneNumber, this.length, this.width, this.height, this.weight, this.tags,
                 this.deliveryType, this.ID, this.status, this.createdAt);
     }
 
@@ -188,7 +188,7 @@ public class ClientOrder {
                 && Objects.equals(this.clientEmail, clientOrder.clientName)
                 && Objects.equals(this.phoneNumber, clientOrder.phoneNumber)
                 && Objects.equals(this.length, clientOrder.length)
-                && Objects.equals(this.depth, clientOrder.depth)
+                && Objects.equals(this.width, clientOrder.width)
                 && Objects.equals(this.height, clientOrder.height)
                 && Objects.equals(this.weight, clientOrder.weight)
                 && Objects.equals(this.tags, clientOrder.tags)
