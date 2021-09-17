@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Component
 public interface OrderRepository extends CrudRepository<ClientOrder, UUID> {
-    List<ClientOrder> findDistinctByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndDepthIsLessThan(Status status, double weight, double height, double length, double depth);
+    List<ClientOrder> findDistinctByStatusIsAndWeightIsLessThanAndHeightIsLessThanAndLengthIsLessThanAndWidthIsLessThan(Status status, double weight, double height, double length, double depth);
 }

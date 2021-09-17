@@ -35,7 +35,6 @@ public class OrderController {
             @RequestParam(defaultValue = "5") int size
     ) {
         try {
-            System.out.println(tags);
             return orderService.getOrders(Optional.ofNullable(max_weight),
                                           Optional.ofNullable(max_height),
                                           Optional.ofNullable(max_length),
