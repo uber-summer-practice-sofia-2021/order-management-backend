@@ -40,18 +40,22 @@ public class OrderController {
                                           Optional.ofNullable(max_length),
                                           Optional.ofNullable(max_width),
                                           Optional.ofNullable(tags),page,size);
+        } catch (ResponseStatusException r) {
+            throw r;
         } catch(Throwable e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfill the request", e);
         }
     }
 
 
     @GetMapping("/orders/{id}")
-    public ClientOrder getOrderByID(@PathVariable UUID id) { 
+    public ClientOrder getOrderByID(@PathVariable UUID id) {
         try {
             return orderService.getOrderByID(id);
+        } catch (ResponseStatusException r) {
+            throw r;
         } catch (Throwable e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfill the request", e);
         }
     }
 
@@ -59,8 +63,10 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> addOrder(@RequestBody ClientOrder order) {
         try {
             return orderService.addOrder(order);
+        } catch (ResponseStatusException r) {
+            throw r;
         } catch (Throwable e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfill the request", e);
         }
     }
 
@@ -68,8 +74,10 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> updateState(@PathVariable UUID id, @PathVariable Status status) {
         try {
             return orderService.updateOrderState(id, status);
+        } catch (ResponseStatusException r) {
+            throw r;
         } catch (Throwable e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfill the request", e);
         }
     }
 
@@ -77,8 +85,8 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> deleteOrderByID(@PathVariable UUID id) { //add exception handling if "id" is missing
         try {
             return orderService.deleteOrderByID(id);
-        } catch (HibernateException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfil the request", e);
+        } catch (Throwable e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to fulfill the request", e);
         }
     }
 }
