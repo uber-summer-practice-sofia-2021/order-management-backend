@@ -1,7 +1,7 @@
 spring:
     jpa:
         hibernate:
-            ddl-auto: validate
+            ddl-auto: create
     datasource:
         url: jdbc:sqlite:orders.db
         driver-class-name: org.sqlite.JDBC
