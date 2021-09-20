@@ -129,8 +129,12 @@ public class OrderService {
                 || order.getWeight() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dimensions should be positive number!");
         } else {
+<<<<<<< Updated upstream
             ClientOrder orderWithID = orderRepository.save(order);
 
+=======
+            orderRepository.save(order);
+>>>>>>> Stashed changes
             Map<String, Object> response = new HashMap<>();
             response.put("Order ID", orderWithID.getID());
             response.put("Order status", "created");

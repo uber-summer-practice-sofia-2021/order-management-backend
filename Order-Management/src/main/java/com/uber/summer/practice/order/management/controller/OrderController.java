@@ -6,6 +6,7 @@ import com.uber.summer.practice.order.management.entities.Tags;
 import com.uber.summer.practice.order.management.services.OrderService;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,6 +60,7 @@ public class OrderController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/orders")
     public ResponseEntity<Map<String, Object>> addOrder(@RequestBody ClientOrder order) {
         try {
