@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class OrderController {
 
@@ -23,6 +24,11 @@ public class OrderController {
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Map<String, Object>> healthCheck() {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/orders")
@@ -60,7 +66,6 @@ public class OrderController {
         }
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/orders")
     public ResponseEntity<Map<String, Object>> addOrder(@RequestBody ClientOrder order) {
         try {
