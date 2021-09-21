@@ -153,6 +153,10 @@ public class OrderService {
                 if (status.equals(Status.PICK_UP)) {
                     isCorrectStatusChange = true;
                 }
+                else if(status.equals(Status.CANCELLED)) {
+                    status = Status.OPEN;
+                    isCorrectStatusChange = true;
+                }
                 break;
             case PICK_UP:
                 if (status.equals(Status.COMPLETED) || status.equals(Status.FAILED)) {
