@@ -130,6 +130,7 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dimensions should be positive number!");
         } else {
             ClientOrder orderWithID = orderRepository.save(order);
+            orderRepository.save(order);
             Map<String, Object> response = new HashMap<>();
             response.put("Order ID", orderWithID.getID());
             response.put("Order status", "created");
