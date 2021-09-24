@@ -1,11 +1,12 @@
 spring:
     jpa:
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
     datasource:
-        url: jdbc:sqlite:orders.db
-        driver-class-name: org.sqlite.JDBC
-
+        url: jdbc:mysql://orders-db.cldppnec5w65.eu-west-1.rds.amazonaws.com:3306/orders-db
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: admin
+        password: 1234qwer
 server:
     error:
         include-message: always
